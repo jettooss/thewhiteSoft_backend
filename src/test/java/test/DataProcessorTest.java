@@ -120,13 +120,12 @@ class DataProcessorTest {
         String output = outputStream.toString();
 
         String expectedOutput = "Меню:\n" +
-                "1 - Вывести запись\n" +
+                "1 - Вывести запись по id\n" +
                 "2 - Найти записи по части наименования\n" +
-                "3 - сохранить в json\n" +
-                "4 - добавить значение\n" +
-                "5 - выход\n" +
+                "3 - выход\n" +
+                "4 - сохранить в json\n" +
+                "5 - добавить значение\n" +
                 "Выберите пункт меню: ";
-
         System.out.println(output);
 
         System.out.println(expectedOutput);

@@ -54,12 +54,12 @@ class Main {
 
 
                     break;
-                case 3:
+                case 4:
                     // Сохранение текущих записей в JSON файл.
 
                     DataProcessor.saveRecordsToJson(outputFilePath, records);
                     break;
-                case   4:
+                case   5:
                     // Добавление новой записи. Пользователю предлагается ввести все необходимые детали.
 
                     System.out.print("Введите идентификатор записи: ");
@@ -84,7 +84,7 @@ class Main {
 
                     break;
 
-                case 5:
+                case 3:
                     return;
                 default:
                     System.out.println("Неверный выбор. Пожалуйста, попробуйте ещё раз.");
