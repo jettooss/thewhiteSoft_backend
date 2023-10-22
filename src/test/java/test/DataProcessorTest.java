@@ -13,7 +13,7 @@ class DataProcessorTest {
     @Test
     void testAddRecord() {
 //        Этот тест проверяет метод addRecord класса DataProcessor.
-//                В первую очередь, метод создает запись, затем добавляет ее в карту, а после проверяет совпадает ли добавленная запись с ожидаемой.
+//                В первую очередь, метод создает запись, затем добавляет ее в карту, а после проверяет ли добавленная запись с ожидаемой.
         Map<Integer, org.example.Record> records = new HashMap<>();
         DataProcessor.addRecord(records, 1, "Test", "Description", "http://example.com");
         Record expectedRecord = new Record(1, "Test", "Description", "http://example.com");
@@ -104,8 +104,7 @@ class DataProcessorTest {
     @Test
     public void testPrintMenu() {
 //        Этот тест написан для проверки функции printMenu, которая выводит меню для пользователя.
-//        Здесь используется перенаправление вывода в ByteArrayOutputStream для последующего сравнения результата с ожидаемым.Но он выдает ошибку,хотя
-//        expectedOutput ==output, возможно дело в кодировке
+//        Здесь используется перенаправление вывода в ByteArrayOutputStream для последующего сравнения результата с ожидаемым.
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
@@ -126,12 +125,8 @@ class DataProcessorTest {
                 "4 - сохранить в json\n" +
                 "5 - добавить значение\n" +
                 "Выберите пункт меню: ";
-        System.out.println(output);
 
-        System.out.println(expectedOutput);
-
-        // я не понимаю, в чем тут ошибка
-        assertEquals(output, expectedOutput,"?????");
+        assertEquals(output.trim(), expectedOutput.trim());
 
      }
 }
