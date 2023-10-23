@@ -13,7 +13,7 @@ class DataProcessorTest {
     @Test
     void testAddRecord() {
 //        Этот тест проверяет метод addRecord класса DataProcessor.
-//                В первую очередь, метод создает запись, затем добавляет ее в карту, а после проверяет ли добавленная запись с ожидаемой.
+//                В первую очередь, метод создает запись, затем добавляет ее в карту, а после проверяет совпадает ли добавленная запись с ожидаемой.
         Map<Integer, org.example.Record> records = new HashMap<>();
         DataProcessor.addRecord(records, 1, "Test", "Description", "http://example.com");
         Record expectedRecord = new Record(1, "Test", "Description", "http://example.com");
@@ -35,7 +35,7 @@ class DataProcessorTest {
         records.put(1, new Record(1, "first", "description1", "link1"));
         records.put(2, new Record(2, "second", "description2", "link2"));
 
-        String result = DataProcessor.searchRecords(records, 1);
+        String result = DataProcessor.searchRecordsById(records, 1);
         String expected = "Запись найдена:\n" +
                 "Идентификатор: 1\n" +
                 "Наименование: first\n" +
@@ -55,7 +55,7 @@ class DataProcessorTest {
         records.put(1, new Record(1, "first", "description1", "link1"));
         records.put(2, new Record(2, "second", "description2", "link2"));
 
-        String result = DataProcessor.searchRecords(records, "second");
+        String result = DataProcessor.searchRecordsByName(records, "second");
         String expected = "Запись найдена:\n" +
                 "Идентификатор: 2\n" +
                 "Наименование: second\n" +
@@ -75,8 +75,8 @@ class DataProcessorTest {
         records.put(1, new Record(1, "first", "description1", "link1"));
         records.put(2, new Record(2, "second", "description2", "link2"));
 
-        String resultId = DataProcessor.searchRecords(records, 3);
-        String resultName = DataProcessor.searchRecords(records, "third");
+        String resultId = DataProcessor.searchRecordsById(records, 3);
+        String resultName = DataProcessor.searchRecordsByName(records, "third");
         System.out.println(resultId);
         System.out.println(resultName);
 
@@ -128,7 +128,6 @@ class DataProcessorTest {
 
         assertEquals(output.trim(), expectedOutput.trim());
 
-     }
+    }
 }
-
 

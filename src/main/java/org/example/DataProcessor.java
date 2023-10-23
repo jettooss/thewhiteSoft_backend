@@ -1,6 +1,7 @@
 package org.example;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.io.File;
@@ -45,19 +46,15 @@ public class DataProcessor {
         System.out.println(expectedOutput);
     }
 
-    public static String searchRecords(Map<Integer, Record> records, Object searchTerm) {
-        // Функция ищет записи в Map на основе поискового запроса (searchTerm), который может быть целым числом или строкой.
-        // Если searchTerm - это Integer, находится запись с таким ID. Если нет - возвращается сообщение о том, что запись не найдена.
-        // Если searchTerm - это String, ищется запись с таким именем. Если таковая не обнаружена - возвращается сообщение о том, что запись не найдена.
+
+    public static String searchRecordsById(Map<Integer, Record> records, Integer id) {
 
         String returnString = "";
-
-        if (searchTerm instanceof Integer) {
-            Record record = records.get((Integer)searchTerm);
+        try {
+            Record record = records.get(id);
 
             if (record == null) {
                 returnString = "Запись не найдена.\n";
-
             } else {
                 returnString = "Запись найдена:\n" +
                         "Идентификатор: " + record.getId() + "\n" +
@@ -66,27 +63,29 @@ public class DataProcessor {
                         "Ссылка: " + record.getLink() + "\n";
             }
 
-        } else if (searchTerm instanceof String) {
-            for (Record record: records.values()) {
-                if (record.getName().equalsIgnoreCase((String)searchTerm)) {
-                    returnString = "Запись найдена:\n" +
-                            "Идентификатор: " + record.getId() + "\n" +
-                            "Наименование: " + record.getName() + "\n" +
-                            "Описание: " + record.getDescription() + "\n" +
-                            "Ссылка: " + record.getLink() + "\n";
-                    break;
-                }
-            }
-
-            if (returnString.equals("")) {
-                returnString = "Запись не найдена.\n";
-            }
-
+        } catch (InputMismatchException e) {
+            returnString = "Ошибка ввода. Пожалуйста, введите целое число.\n";
         }
 
         return returnString;
     }
 
+    public static String searchRecordsByName(Map<Integer, Record> records, String name) {
+        String returnString = "Запись не найдена.\n";
+
+        for (Record record: records.values()) {
+            if (record.getName().equalsIgnoreCase(name)) {
+                returnString = "Запись найдена:\n" +
+                        "Идентификатор: " + record.getId() + "\n" +
+                        "Наименование: " + record.getName() + "\n" +
+                        "Описание: " + record.getDescription() + "\n" +
+                        "Ссылка: " + record.getLink() + "\n";
+                break;
+            }
+        }
+
+        return returnString;
+    }
 
     public static Record addRecord (Map<Integer, Record> records, int id, String name, String description, String link) {
         // Функция создает новую запись на основе переданных данных (id, name, description, link), сохраняет ее в переданной Map и возвращает созданную запись.

@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -34,11 +35,14 @@ class Main {
             switch (choice) {
                 case 1:
                     System.out.print("Введите идентификатор записи: ");
-                    int id = scanner.nextInt();
+                    try {
+                        int id = scanner.nextInt();
+                        String data = DataProcessor.searchRecordsById(records, id);
+                        System.out.println(data);
+                    } catch (InputMismatchException e) {
+                        System.out.println("Ошибка ввода. Пожалуйста, введите целое число");
+                    }
 
-
-                    String data = DataProcessor.searchRecords(records, id);
-                    System.out.println(data);
 
 
                     break;
@@ -47,7 +51,7 @@ class Main {
 
                     System.out.print("Введите часть наименования для поиска: ");
                     String searchTerm = scanner.nextLine();
-                    data = DataProcessor.searchRecords(records, searchTerm);
+                    String data = DataProcessor.searchRecordsByName(records, searchTerm);
                     System.out.println(data);
 
 
@@ -60,7 +64,7 @@ class Main {
                      break;
                 case   5:
                     // Добавление новой записи. Пользователю предлагается ввести все необходимые детали.
-
+                    int id;
                     System.out.print("Введите идентификатор записи: ");
                     id = scanner.nextInt();
 
