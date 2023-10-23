@@ -1,5 +1,7 @@
 package org.example;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.io.File;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -92,13 +94,16 @@ public class DataProcessor {
         Record newRecord = new Record(id, name, description, link);
         return records.put(id, newRecord);
     }
-    public static boolean saveRecordsToJson(String filePath, Map<Integer, Record> records) throws IOException {
+    public static boolean saveRecordsToJson(String name_file , Map<Integer, Record> records) throws IOException {
         // Функция конвертирует Map в JSON и сохраняет записи в файл. Если файл успешно создан, функция возвращает true.
         // Если в процессе записи произошла ошибка, то выбрасывается исключение.
+        String outputFilePath = "src/main/resources/";
+
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(new File(filePath), records);
-        System.out.println("Список записей успешно сохранен в JSON файл: " + filePath);
-        return new File(filePath).exists();
+        List<Record> recordList = new ArrayList<>(records.values());
+        objectMapper.writeValue(new File(outputFilePath+name_file+".json"), recordList);
+        System.out.println("Список записей успешно сохранен в JSON файл: " + name_file);
+        return new File(outputFilePath+name_file+".json").exists();
 
     }
 

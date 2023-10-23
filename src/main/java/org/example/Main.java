@@ -15,8 +15,6 @@ class Main {
 
         Scanner scanner = new Scanner(System.in);
         String filePath = "src/main/resources/data.json";
-        String outputFilePath = "src/main/resources/outputFilePath.json";
-
 
         try {
             DataProcessor.loadRecordsFromFile(filePath, records);
@@ -56,9 +54,10 @@ class Main {
                     break;
                 case 4:
                     // Сохранение текущих записей в JSON файл.
-
-                    DataProcessor.saveRecordsToJson(outputFilePath, records);
-                    break;
+                    System.out.print(" имя файла для сохранения данных: ");
+                    String fileName = scanner.nextLine();
+                    DataProcessor.saveRecordsToJson(fileName, records);
+                     break;
                 case   5:
                     // Добавление новой записи. Пользователю предлагается ввести все необходимые детали.
 
