@@ -10,104 +10,98 @@ import java.util.HashMap;
 import java.util.Map;
 
 class DataProcessorTest {
+    //        Этот тест проверяет метод addRecord класса DataProcessor.
+    //      В первую очередь, метод создает запись, затем добавляет ее в карту, а после проверяет совпадает ли добавленная запись с ожидаемой.
     @Test
     void testAddRecord() {
-//        Этот тест проверяет метод addRecord класса DataProcessor.
-//                В первую очередь, метод создает запись, затем добавляет ее в карту, а после проверяет совпадает ли добавленная запись с ожидаемой.
-        Map<Integer, org.example.Record> records = new HashMap<>();
-        DataProcessor.addRecord(records, 1, "Test", "Description", "http://example.com");
-        Record expectedRecord = new Record(1, "Test", "Description", "http://example.com");
+        Map<Integer, Record> records = new HashMap<>();
+        int id = 1;
+        String name = "Test";
+        String description = "Description";
+        String link = "http://example.com";
+
+        DataProcessor.addRecord(records, id, name, description, link);
+        Record expectedRecord = new Record(id, name, description, link);
         Record actualRecord = records.get(1);
         assertNotNull(actualRecord); // проверяем, что запись не null
         assertEquals(expectedRecord.getId(), actualRecord.getId());
         assertEquals(expectedRecord.getName(), actualRecord.getName());
-        assertEquals(expectedRecord.getDescription(), actualRecord.getDescription()); // new
-        assertEquals(expectedRecord.getLink(), actualRecord.getLink()); // new
+        assertEquals(expectedRecord.getDescription(), actualRecord.getDescription());
+        assertEquals(expectedRecord.getLink(), actualRecord.getLink());
     }
 
-
+    //   Этот тест проверяет, правильно ли метод searchRecords ищет записи по идентификатору и возвращает соответствующую сигнатуру строки.
     @Test
-
     void testSearchRecordsById() {
-//        Этот тест проверяет, правильно ли метод searchRecords ищет записи по идентификатору и возвращает соответствующую сигнатуру строки.
         Map<Integer, Record> records = new HashMap<>();
-        //добавим в Map демонстрационные записи
-        records.put(1, new Record(1, "first", "description1", "link1"));
-        records.put(2, new Record(2, "second", "description2", "link2"));
-
-        String result = DataProcessor.searchRecordsById(records, 1);
+        int id = 1;
+        String name = "Test";
+        String description = "Description";
+        String link = "http://example.com";
+        records.put(1, new Record(id, name, description, link));
+        String actual = DataProcessor.searchRecordsById(records, 1);
         String expected = "Запись найдена:\n" +
-                "Идентификатор: 1\n" +
-                "Наименование: first\n" +
-                "Описание: description1\n" +
-                "Ссылка: link1\n";
-        assertEquals(expected, result, "Тест не пройден: поиск по идентификатору");
+                "Идентификатор: " + id + "\n" +
+                "Наименование: " + name + "\n" +
+                "Описание: " + description + "\n" +
+                "Ссылка: " + link + "\n";
+
+        assertEquals(expected, actual);
     }
 
+    //   Этот тест проверяет, правильно ли метод searchRecords находит записи по имени и возвращает соответствующую информацию.
     @Test
     void testSearchRecordsByName() {
-//        Этот тест проверяет, правильно ли метод searchRecords находит записи по имени и возвращает соответствующую информацию.
-
-
-
         Map<Integer, Record> records = new HashMap<>();
-        //добавим в Map демонстрационные записи
-        records.put(1, new Record(1, "first", "description1", "link1"));
-        records.put(2, new Record(2, "second", "description2", "link2"));
-
-        String result = DataProcessor.searchRecordsByName(records, "second");
+        int id = 1;
+        String name = "Test";
+        String description = "Description";
+        String link = "http://example.com";
+        records.put(1, new Record(id, name, description, link));
+        String result = DataProcessor.searchRecordsByName(records, name);
         String expected = "Запись найдена:\n" +
-                "Идентификатор: 2\n" +
-                "Наименование: second\n" +
-                "Описание: description2\n" +
-                "Ссылка: link2\n";
+                "Идентификатор: " + id + "\n" +
+                "Наименование: " + name + "\n" +
+                "Описание: " + description + "\n" +
+                "Ссылка: " + link + "\n";
+        assertEquals(result, expected);
 
-        assertEquals(expected, result, "Тест не пройден: поиск по имени");
     }
 
+    //        Этот тест проверяет, правильно ли метод searchRecords обрабатывает запросы поиска записей,
+    //          которые не существуют (по идентификатору или имени), и возвращает соответствующее сообщение.
     @Test
     void testSearchRecordsWithNoRecord() {
-//        Этот тест проверяет, правильно ли метод searchRecords обрабатывает запросы поиска записей,
-//                которые не существуют (по идентификатору или имени), и возвращает соответствующее сообщение.
 
         Map<Integer, Record> records = new HashMap<>();
-        //добавим в Map демонстрационные записи
         records.put(1, new Record(1, "first", "description1", "link1"));
         records.put(2, new Record(2, "second", "description2", "link2"));
-
         String resultId = DataProcessor.searchRecordsById(records, 3);
         String resultName = DataProcessor.searchRecordsByName(records, "third");
-        System.out.println(resultId);
-        System.out.println(resultName);
-
         String expected = "Запись не найдена.\n";
 
         assertEquals(expected, resultId, "Запись с указанным идентификатором не найдена.\n");
         assertEquals(expected, resultName, "Запись с указанным наименованием не найдена.\n");
     }
 
+    //   Этот тест проверяет, правильно ли метод loadRecordsFromFile загружает данные из файла и складывает в карту.
     @Test
-
     public void testLoadRecordsFromFile() throws IOException {
-//        Этот тест проверяет, правильно ли метод loadRecordsFromFile загружает данные из файла и складывает в карту.
         Map<Integer, Record> records = new HashMap<>();
         String filePath = "src/test/resources/test-input.json";
 
-        // Act
         DataProcessor.loadRecordsFromFile(filePath, records);
         assertEquals(2, records.size(), "Размер карты записей должен быть равен 2");
 
-        System.out.println(records);
-
 
     }
+
+    //        Этот тест написан для проверки функции printMenu, которая выводит меню для пользователя.
+    //        Здесь используется перенаправление вывода в ByteArrayOutputStream для последующего сравнения результата с ожидаемым.
     @Test
     public void testPrintMenu() {
-//        Этот тест написан для проверки функции printMenu, которая выводит меню для пользователя.
-//        Здесь используется перенаправление вывода в ByteArrayOutputStream для последующего сравнения результата с ожидаемым.
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
-
 
         PrintStream originalPrintStream = System.out;
         System.setOut(printStream);
@@ -127,7 +121,6 @@ class DataProcessorTest {
                 "Выберите пункт меню: ";
 
         assertEquals(output.trim(), expectedOutput.trim());
-
     }
 }
 
