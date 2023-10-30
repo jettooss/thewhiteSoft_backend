@@ -7,7 +7,6 @@ import java.util.Scanner;
 class Main {
     public static void main(String[]  args) throws IOException {
         Map<Integer, Record> records = new HashMap<>();
-
         if (args.length > 0) {
             System.out.println(args[0] );
 

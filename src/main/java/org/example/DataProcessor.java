@@ -18,14 +18,12 @@ public class DataProcessor {
             String description = recordNode.get("description").asText();
             String link = recordNode.get("link").asText();
             System.out.println("ID: " + id + ", Name: " + name + ", Description: " + description + ", Link: " + link);
-
             Record record = new Record(id, name, description, link);
             records.put(id, record);
         }
     }
     // Функция выводит в консоль текстовое меню для интерфейса пользователя. Этот метод предназначен для взаимодействия с пользователем.
     public static void printMenu() {
-
         String expectedOutput = "Меню:\n" +
                 "1 - Вывести запись по id\n" +
                 "2 - Найти записи по части наименования\n" +
@@ -38,7 +36,6 @@ public class DataProcessor {
     public static String searchRecordsById(Map<Integer, Record> records, Integer id) {
         Record record = records.get(id);
         String returnString;
-
         if (record != null) {
              returnString = "Запись найдена:\n" +
                     "Идентификатор: " + record.getId() + "\n" +
@@ -47,14 +44,12 @@ public class DataProcessor {
                     "Ссылка: " + record.getLink() + "\n";
         } else {
             System.out.println("Запись не найдена");
-
             return "Запись не найдена.\n";
          }
         return returnString;
     }
     public static String searchRecordsByName(Map<Integer, Record> records, String name) {
         String returnString = "Запись не найдена.\n";
-
         for (Record record: records.values()) {
             if (record.getName().equalsIgnoreCase(name)) {
                 returnString = "Запись найдена:\n" +
