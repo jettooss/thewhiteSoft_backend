@@ -1,7 +1,6 @@
 package test;
 import org.example.DataProcessor;
 import org.example.Record;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.ByteArrayOutputStream;
@@ -11,27 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 class DataProcessorTest {
-    private Map<Integer, Record> records;
-    private Record expectedRecord;
-
-    @BeforeEach
-    void setUp() {
-        records = new HashMap<>();
-        expectedRecord = getExpectedRecord(1, "Test", "Description", "http://example.com");
-    }
-
-    private Record getExpectedRecord(int id, String name, String description, String link) {
-        return new Record(id, name, description, link);
-    }
-
+    private final int id = 1;
+    private final String name = "Test";
+    private final String description = "Description";
+    private final String link = "http://example.com";
+    private Record expectedRecord =new Record(id,name,description,link);
+    private Map<Integer, Record> records = new HashMap<>();
     @Test
     void testAddRecord() {
-        // Arrange
-        int id = 1;
-        String name = "Test";
-        String description = "Description";
-        String link = "http://example.com";
-
         // Act
         DataProcessor.addRecord(records, id, name, description, link);
         Record actualRecord = records.get(1);
@@ -43,7 +29,6 @@ class DataProcessorTest {
         assertEquals(expectedRecord.getDescription(), actualRecord.getDescription());
         assertEquals(expectedRecord.getLink(), actualRecord.getLink());
     }
-
     @Test
     void testSearchRecordsById() {
         // Arrange
@@ -60,7 +45,6 @@ class DataProcessorTest {
         // Assert
         assertEquals(expected, actual);
     }
-
     @Test
     void testSearchRecordsByName() {
         // Arrange
@@ -78,7 +62,20 @@ class DataProcessorTest {
         assertEquals(result, expected);
     }
     @Test
-    void testSearchRecordsWithNoRecord() {
+    void testSearchRecordsWithNoRecordName() {
+        // Arrange
+        records.put(1, new Record(1, "first", "description1", "link1"));
+        records.put(2, new Record(2, "second", "description2", "link2"));
+        String expected = "Запись не найдена.\n";
+
+        // Act
+        String resultName = DataProcessor.searchRecordsByName(records, "third");
+
+        // Assert
+        assertEquals(expected, resultName, "Запись с указанным наименованием не найдена.\n");
+    }
+    @Test
+    void testSearchRecordsWithNoRecordID() {
         // Arrange
         records.put(1, new Record(1, "first", "description1", "link1"));
         records.put(2, new Record(2, "second", "description2", "link2"));
@@ -86,11 +83,9 @@ class DataProcessorTest {
 
         // Act
         String resultId = DataProcessor.searchRecordsById(records, 3);
-        String resultName = DataProcessor.searchRecordsByName(records, "third");
 
         // Assert
         assertEquals(expected, resultId, "Запись с указанным идентификатором не найдена.\n");
-        assertEquals(expected, resultName, "Запись с указанным наименованием не найдена.\n");
     }
     @Test
     public void testLoadRecordsFromFile() throws IOException {
