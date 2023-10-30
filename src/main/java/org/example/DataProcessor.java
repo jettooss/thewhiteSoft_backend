@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DataProcessor {
-
     // Функция загружает записи из JSON файла по переданному пути, преобразует их в объекты Record и хранит в переданной Map.
     public static void loadRecordsFromFile(String filePath, Map<Integer, Record> records) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -24,7 +23,6 @@ public class DataProcessor {
             records.put(id, record);
         }
     }
-
     // Функция выводит в консоль текстовое меню для интерфейса пользователя. Этот метод предназначен для взаимодействия с пользователем.
     public static void printMenu() {
 
@@ -37,9 +35,7 @@ public class DataProcessor {
                 "Выберите пункт меню: ";
         System.out.println(expectedOutput);
     }
-
     public static String searchRecordsById(Map<Integer, Record> records, Integer id) {
-
         Record record = records.get(id);
         String returnString;
 
@@ -49,7 +45,6 @@ public class DataProcessor {
                     "Наименование: " + record.getName() + "\n" +
                     "Описание: " + record.getDescription() + "\n" +
                     "Ссылка: " + record.getLink() + "\n";
-
         } else {
             System.out.println("Запись не найдена");
 
@@ -72,20 +67,15 @@ public class DataProcessor {
         }
         return returnString;
     }
-
     // Функция создает новую запись на основе переданных данных (id, name, description, link), сохраняет ее в переданной Map и возвращает созданную запись.
     public static Record addRecord (Map<Integer, Record> records, int id, String name, String description, String link) {
-
         Record newRecord = new Record(id, name, description, link);
         return records.put(id, newRecord);
     }
-
     // Функция конвертирует Map в JSON и сохраняет записи в файл. Если файл успешно создан, функция возвращает true.
     // Если в процессе записи произошла ошибка, то выбрасывается исключение.
     public static boolean saveRecordsToJson(String name_file , Map<Integer, Record> records) throws IOException {
-
         String outputFilePath = "src/main/resources/";
-
         ObjectMapper objectMapper = new ObjectMapper();
         List<Record> recordList = new ArrayList<>(records.values());
         objectMapper.writeValue(new File(outputFilePath+name_file+".json"), recordList);
