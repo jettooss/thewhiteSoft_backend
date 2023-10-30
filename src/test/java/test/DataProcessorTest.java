@@ -73,8 +73,7 @@ class DataProcessorTest {
 
         // Act
         String result = DataProcessor.searchRecordsByName(records, expectedRecord.getName());
-
-
+        
         // Assert
         assertEquals(result, expected);
     }
@@ -84,7 +83,6 @@ class DataProcessorTest {
         records.put(1, new Record(1, "first", "description1", "link1"));
         records.put(2, new Record(2, "second", "description2", "link2"));
         String expected = "Запись не найдена.\n";
-
 
         // Act
         String resultId = DataProcessor.searchRecordsById(records, 3);
