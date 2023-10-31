@@ -1,6 +1,7 @@
-package test;
-import org.example.DataProcessor;
-import org.example.Record;
+package com.example.demo;
+import com.example.demo.DataProcessor.*;
+import com.example.demo.DataProcessor.load;
+import com.example.demo.Model.Record;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.ByteArrayOutputStream;
@@ -8,7 +9,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 class DataProcessorTest {
     private final int id = 1;
     private final String name = "Test";
@@ -19,7 +22,7 @@ class DataProcessorTest {
     @Test
     void testAddRecord() {
         // Act
-        DataProcessor.addRecord(records, id, name, description, link);
+        Main_Functions.addRecord(records, id, name, description, link);
         Record actualRecord = records.get(1);
 
         // Assert
@@ -40,7 +43,7 @@ class DataProcessorTest {
                 "Ссылка: " + expectedRecord.getLink() + "\n";
 
         // Act
-        String actual = DataProcessor.searchRecordsById(records, 1);
+        String actual = Main_Functions.searchRecordsById(records, 1);
 
         // Assert
         assertEquals(expected, actual);
@@ -56,7 +59,7 @@ class DataProcessorTest {
                 "Ссылка: " + expectedRecord.getLink() + "\n";
 
         // Act
-        String result = DataProcessor.searchRecordsByName(records, expectedRecord.getName());
+        String result = Main_Functions.searchRecordsByName(records, expectedRecord.getName());
         
         // Assert
         assertEquals(result, expected);
@@ -69,7 +72,7 @@ class DataProcessorTest {
         String expected = "Запись не найдена.\n";
 
         // Act
-        String resultName = DataProcessor.searchRecordsByName(records, "third");
+        String resultName = Main_Functions.searchRecordsByName(records, "third");
 
         // Assert
         assertEquals(expected, resultName, "Запись с указанным наименованием не найдена.\n");
@@ -82,7 +85,7 @@ class DataProcessorTest {
         String expected = "Запись не найдена.\n";
 
         // Act
-        String resultId = DataProcessor.searchRecordsById(records, 3);
+        String resultId = Main_Functions.searchRecordsById(records, 3);
 
         // Assert
         assertEquals(expected, resultId, "Запись с указанным идентификатором не найдена.\n");
@@ -90,10 +93,10 @@ class DataProcessorTest {
     @Test
     public void testLoadRecordsFromFile() throws IOException {
         // Arrange
-        String filePath = "src/test/resources/test-input.json";
+        String filePath = "src/test/java/com/example/demo/resources/test-input.json";
 
         // Act
-        DataProcessor.loadRecordsFromFile(filePath, records);
+        Map<Integer, Record> records = load.loadRecordsFromJson(filePath);
 
         // Assert
         assertEquals(2, records.size(), "Размер карты записей должен быть равен 2");
@@ -114,7 +117,7 @@ class DataProcessorTest {
                 "Выберите пункт меню: ";
 
         // Act
-        DataProcessor.printMenu();
+        Menu.printMenu();
         System.setOut(originalPrintStream);
         String output = outputStream.toString();
 

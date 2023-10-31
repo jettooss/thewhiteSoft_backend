@@ -1,11 +1,16 @@
-package org.example;
+package com.example.demo;
+import com.example.demo.Model.Record;
+import com.example.demo.DataProcessor.*;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
-public class runProcessingLoop {
-    public static void run(Scanner scanner, Map<Integer, Record> records) throws IOException {
+
+public class RunProcessing {
+    public static void run( Map<Integer, Record> records) throws IOException {
         while (true) {
-            DataProcessor.printMenu();
+            Scanner scanner = new Scanner(System.in);
+
+            Menu.printMenu();
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
@@ -22,7 +27,8 @@ public class runProcessingLoop {
                     addRecord(scanner, records);
                     break;
                 case 3:
-                    return;
+                    System.exit(0);
+                    break;
                 default:
                     System.out.println("Неверный выбор. Пожалуйста, попробуйте ещё раз.");
             }
@@ -31,19 +37,19 @@ public class runProcessingLoop {
     private static void searchRecordsById(Scanner scanner, Map<Integer, Record> records) {
         System.out.print("Введите идентификатор записи: ");
         int id = scanner.nextInt();
-        String data = DataProcessor.searchRecordsById(records, id);
+        String data = Main_Functions.searchRecordsById(records, id);
         System.out.println(data);
     }
     private static void searchRecordsByName(Scanner scanner, Map<Integer, Record> records) {
         System.out.print("Введите часть наименования для поиска: ");
         String searchTerm = scanner.nextLine();
-        String data = DataProcessor.searchRecordsByName(records, searchTerm);
+        String data = Main_Functions.searchRecordsByName(records, searchTerm);
         System.out.println(data);
     }
     private static void saveRecordsToJson(Scanner scanner, Map<Integer, Record> records) throws IOException {
         System.out.print("Введите имя файла для сохранения данных: ");
         String fileName = scanner.nextLine();
-        DataProcessor.saveRecordsToJson(fileName, records);
+        Save.saveToJson(fileName, records);
     }
     private static void addRecord(Scanner scanner, Map<Integer, Record> records) {
         System.out.print("Введите идентификатор записи: ");
@@ -57,7 +63,7 @@ public class runProcessingLoop {
         String link = scanner.nextLine();
         Record newRecord = new Record(id, name, description, link);
         records.put(id, newRecord);
-        DataProcessor.addRecord(records, id, name, description, link);
+        Main_Functions.addRecord(records, id, name, description, link);
         System.out.println("Запись успешно добавлена в Map.");
     }
 
