@@ -1,18 +1,35 @@
-package com.example.demo;
+package com.example.demo.Controller;
 import com.example.demo.Model.Record;
 import com.example.demo.DataProcessor.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
 
-public class RunProcessing {
-    public static void run( Map<Integer, Record> records) throws IOException {
+
+@Component
+public class AppController implements CommandLineRunner {
+    private final RecordService recordService;
+    private final RecordRepository recordRepository;
+
+
+    @Autowired
+    public AppController(RecordService recordService, RecordRepository recordRepository) {
+        this.recordService = recordService;
+        this.recordRepository = recordRepository;
+    }
+    public void run(String[] args) throws IOException {
+        Map<Integer, Record> records = recordRepository.loadRecordsFromJson();
+
         while (true) {
             Scanner scanner = new Scanner(System.in);
 
             Menu.printMenu();
             int choice = scanner.nextInt();
             scanner.nextLine();
+
             switch (choice) {
                 case 1:
                     searchRecordsById(scanner, records);
@@ -20,11 +37,11 @@ public class RunProcessing {
                 case 2:
                     searchRecordsByName(scanner, records);
                     break;
-                case 4:
-                    saveRecordsToJson(scanner, records);
-                    break;
                 case 5:
                     addRecord(scanner, records);
+                    break;
+                case 4:
+                    saveRecordsToJson(scanner);
                     break;
                 case 3:
                     System.exit(0);
@@ -34,24 +51,25 @@ public class RunProcessing {
             }
         }
     }
-    private static void searchRecordsById(Scanner scanner, Map<Integer, Record> records) {
+    private void searchRecordsById(Scanner scanner, Map<Integer, Record> records) {
         System.out.print("Введите идентификатор записи: ");
         int id = scanner.nextInt();
-        String data = Main_Functions.searchRecordsById(records, id);
-        System.out.println(data);
+        scanner.nextLine();
+        String result = recordService.searchRecordsById(id);
+        System.out.println(result);
     }
-    private static void searchRecordsByName(Scanner scanner, Map<Integer, Record> records) {
+    private void searchRecordsByName(Scanner scanner, Map<Integer, Record> records) {
         System.out.print("Введите часть наименования для поиска: ");
         String searchTerm = scanner.nextLine();
-        String data = Main_Functions.searchRecordsByName(records, searchTerm);
-        System.out.println(data);
+        String result = recordService.searchRecordsByName(searchTerm);
+        System.out.println(result);
     }
-    private static void saveRecordsToJson(Scanner scanner, Map<Integer, Record> records) throws IOException {
+    private  void saveRecordsToJson(Scanner scanner) throws IOException, IOException {
         System.out.print("Введите имя файла для сохранения данных: ");
         String fileName = scanner.nextLine();
-        Save.saveToJson(fileName, records);
+        recordRepository.saveToJson(fileName);
     }
-    private static void addRecord(Scanner scanner, Map<Integer, Record> records) {
+    private void addRecord(Scanner scanner, Map<Integer, Record> records) {
         System.out.print("Введите идентификатор записи: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -59,12 +77,9 @@ public class RunProcessing {
         String name = scanner.nextLine();
         System.out.print("Введите описание записи: ");
         String description = scanner.nextLine();
-        System.out.print("Введите ссылку на записи: ");
+        System.out.print("Введите ссылку на запись: ");
         String link = scanner.nextLine();
-        Record newRecord = new Record(id, name, description, link);
-        records.put(id, newRecord);
-        Main_Functions.addRecord(records, id, name, description, link);
-        System.out.println("Запись успешно добавлена в Map.");
+        Record addedRecord = recordService.addRecord(id, name, description, link);
+        System.out.println("Запись успешно добавлена в Map: " + addedRecord);
     }
-
 }
