@@ -29,7 +29,6 @@ public class RecordRepository {
         this.inputSavePath = inputSavePath;
         this.records = loadRecordsFromJson();
     }
-
     public Map<Integer, Record> loadRecordsFromJson() {
         try {
             Map<Integer, Record> records = new HashMap<>();
@@ -45,7 +44,6 @@ public class RecordRepository {
                 Record record = new Record(id, name, description, link);
                 records.put(id, record);
             }
-
             return records;
         } catch (IOException e) {
             throw new RuntimeException("Failed to load records from dataPath: " + filePath, e);
