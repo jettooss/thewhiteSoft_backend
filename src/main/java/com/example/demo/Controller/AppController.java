@@ -1,7 +1,7 @@
 package com.example.demo.Controller;
 import com.example.demo.Model.Record;
 import com.example.demo.DataProcessor.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
@@ -9,20 +9,14 @@ import java.util.Map;
 import java.util.Scanner;
 
 
+@RequiredArgsConstructor
 @Component
 public class AppController implements CommandLineRunner {
     private final RecordService recordService;
     private final RecordRepository recordRepository;
 
-
-    @Autowired
-    public AppController(RecordService recordService, RecordRepository recordRepository) {
-        this.recordService = recordService;
-        this.recordRepository = recordRepository;
-    }
     public void run(String[] args) throws IOException {
-        Map<Integer, Record> records = recordRepository.loadRecordsFromJson();
-
+        Map<Integer, Record> records = recordRepository.getRecords();
         while (true) {
             Scanner scanner = new Scanner(System.in);
 

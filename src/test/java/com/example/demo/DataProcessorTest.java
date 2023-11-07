@@ -4,7 +4,6 @@ import com.example.demo.Model.Record;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
-
 import org.junit.jupiter.api.BeforeEach;
 
 public class DataProcessorTest {
@@ -17,8 +16,6 @@ public class DataProcessorTest {
 
     @Test
     void testLoadRecordsFromJson() {
-        recordRepository.loadRecordsFromJson();
-
         assertFalse(recordRepository.getRecords().isEmpty());
 
         Record record = recordRepository.getRecordById(1);
@@ -27,24 +24,22 @@ public class DataProcessorTest {
     @Test
     void testGetRecordById() {
         Record record = recordRepository.getRecordById(2);
-
         assertNotNull(record);
         assertEquals("A", record.getName());
+        assertEquals("2323qweqwe2", record.getDescription());
+        assertEquals("323wqewqeqwe23", record.getLink());
     }
     @Test
     void testGetRecordByName() {
-        // Test getting a record by name
         Record record = recordRepository.getRecordByName("B");
-
         assertNotNull(record);
         assertEquals(1, record.getId());
+        assertEquals("2asdad3232", record.getDescription());
+        assertEquals("wqewqWQewqewqe", record.getLink());
     }
     @Test
     void testSaveToJson() {
-        // Test saving records to a JSON file
-        recordRepository.loadRecordsFromJson();
-
-        // Save the records to a test file
+        recordRepository.getRecords();
         String testFileName = "test-save";
         try {
             assertTrue(recordRepository.saveToJson(testFileName + ".json"));

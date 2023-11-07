@@ -36,7 +36,7 @@ public class RecordService {
     }
     public Record addRecord(int id, String name, String description, String link) {
         Record newRecord = new Record(id, name, description, link);
-        repository.getRecords().put(id, newRecord); // Add to the repository's records
+        repository.put(newRecord);
         return newRecord;
     }
 }
