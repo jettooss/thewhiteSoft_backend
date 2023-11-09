@@ -3,7 +3,7 @@ import com.example.demo.Model.Record;
 import java.util.List;
 
 public interface RecordServiceInterface {
-    Record createRecord(String name, String description, String link);
+    Record createRecord(int id,String name, String description, String link);
     Record getRecordById(Integer id);
     Record updateRecord(Integer id, String name, String description, String link);
     boolean deleteRecord(Integer id);

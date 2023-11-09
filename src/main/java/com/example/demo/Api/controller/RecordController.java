@@ -1,78 +1,73 @@
-package com.example.demo.Api.controller;
-import com.example.demo.Api.NotFoundException;
+package com.example.demo.Api.controller.service;
+import com.example.demo.DataProcessor.RecordRepository;
 import com.example.demo.Model.Record;
-import com.example.demo.Api.controller.service.RecordService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
-@Tag(name = "Контроллер для работы с хранилищем полезностей")
-@RestController
-@RequestMapping(value = "api/records", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RecordController {
-    private final RecordService recordService;
+@Service
+public class RecordService implements RecordServiceInterface {
+    private final RecordRepository repository;
 
     @Autowired
-    public RecordController(RecordService recordService) {
-        this.recordService = recordService;
+    public RecordService(RecordRepository repository) {
+        this.repository = repository;
     }
 
-    @GetMapping("/all")
-    @Operation(description = "Получение записи по идентификатору")
-    public ResponseEntity<List<Record>> getAllRecords() {
-        List<Record> records = recordService.getAllRecords();
-        return new ResponseEntity<>(records, HttpStatus.OK);
+    public Record createRecord(int id,String name, String description, String link) {
+//        int id = generateUniqueID();
+        Record newRecord = new Record(id, name, description, link);
+        repository.getRecords().put(id, newRecord);
+        return newRecord;
     }
-    @Operation(description = "Получение по ID")
-    @GetMapping("/{id}")
-    public ResponseEntity<Record> getRecordById(@PathVariable Integer id) {
-        Record record = recordService.getRecordById(id);
+
+    public Record getRecordById(Integer id) {
+        return repository.getRecordById(id);
+    }
+
+    public Record updateRecord(Integer id, String name, String description, String link) {
+        Record existingRecord = repository.getRecordById(id);
+
+        if (existingRecord != null) {
+            existingRecord.setName(name);
+            existingRecord.setDescription(description);
+            existingRecord.setLink(link);
+
+            return existingRecord;
+        } else {
+            return null;
+        }
+    }
+
+    public boolean deleteRecord(Integer id) {
+        return repository.getRecords().remove(id) != null;
+    }
+
+    public String searchRecordsByName(String name) {
+        Record record = repository.getRecordByName(name);
         if (record != null) {
-            return new ResponseEntity<>(record, HttpStatus.OK);
+            return "Найденная запись:\n" +
+                    "ID: " + record.getId() + "\n" +
+                    "Имя: " + record.getName() + "\n" +
+                    "Описание: " + record.getDescription() + "\n" +
+                    "Ссылка: " + record.getLink() + "\n";
         } else {
-            throw new NotFoundException("Запись не найдена: " + id);
+            return "Запись не найдена\n";
         }
     }
 
-    @Operation(description = "Получение по имени")
-    @GetMapping("/name")
-    public ResponseEntity<String> searchRecordsByName(@RequestParam String name) {
-        String result = recordService.searchRecordsByName(name);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    public List<Record> getAllRecords() {
+        return new ArrayList<>(repository.getRecords().values());
     }
 
-    @Operation(description = "Добавление записи")
-    @PostMapping("/create")
-    public ResponseEntity<Record> createRecord(@RequestBody Record record) {
-        Record createdRecord = recordService.createRecord(record.getName(), record.getDescription(), record.getLink());
-        return new ResponseEntity<>(createdRecord, HttpStatus.CREATED);
-    }
-
-    @Operation(description = "Обновление записи")
-    @PutMapping("/{id}")
-    public ResponseEntity<Record> updateRecord(@PathVariable Integer id, @RequestParam String name,@RequestParam String description,@RequestParam String link ) {
-        Record updated = recordService.updateRecord(id,       name,   description,   link);
-        if (updated != null) {
-            return new ResponseEntity<>(updated, HttpStatus.OK);
-        } else {
-            throw new NotFoundException("Запись не найдена: " + id);
-        }
-    }
-
-    @Operation(description = "Удаление по ID")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecord(@PathVariable Integer id) {
-        boolean deleted = recordService.deleteRecord(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            throw new NotFoundException("Запись не найдена: " + id);
-        }
-    }
+//    private int generateUniqueID() {
+//
+//        Random rand = new Random();
+//        int uniqueID = rand.nextInt(100000);
+//        return uniqueID;
+//
+//    }
 }
