@@ -28,7 +28,8 @@ public class RecordRepository {
         this.inputSavePath = inputSavePath;
         this.records = loadRecordsFromJson();
     }
-    private Map<Integer, Record> loadRecordsFromJson() {
+
+    public Map<Integer, Record> loadRecordsFromJson() {
         try {
             List<Record> recordList = objectMapper.readValue(new File(filePath), new TypeReference<List<Record>>() {});
 

@@ -14,5 +14,4 @@ public class Record {
     private String name;
     private String description;
     private String link;
-
 }
