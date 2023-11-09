@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 @Service
@@ -15,15 +16,18 @@ public class RecordService implements RecordServiceInterface {
     public RecordService(RecordRepository repository) {
         this.repository = repository;
     }
-    public Record createRecord(String name, String description, String link) {
-        int id = generateUniqueID();
+
+    public Record createRecord(int id,String name, String description, String link) {
+//        int id = generateUniqueID();
         Record newRecord = new Record(id, name, description, link);
         repository.getRecords().put(id, newRecord);
         return newRecord;
     }
+
     public Record getRecordById(Integer id) {
         return repository.getRecordById(id);
     }
+
     public Record updateRecord(Integer id, String name, String description, String link) {
         Record existingRecord = repository.getRecordById(id);
 
@@ -41,6 +45,7 @@ public class RecordService implements RecordServiceInterface {
     public boolean deleteRecord(Integer id) {
         return repository.getRecords().remove(id) != null;
     }
+
     public String searchRecordsByName(String name) {
         Record record = repository.getRecordByName(name);
         if (record != null) {
@@ -53,12 +58,16 @@ public class RecordService implements RecordServiceInterface {
             return "Запись не найдена\n";
         }
     }
+
     public List<Record> getAllRecords() {
         return new ArrayList<>(repository.getRecords().values());
     }
-    private int generateUniqueID() {
-        // Реализация генерации уникального ID (например, увеличение счетчика или использование UUID)
-        // Вам следует заменить этот код на реальную реализацию генерации уникальных идентификаторов.
-        return 12345;
-    }
+
+//    private int generateUniqueID() {
+//
+//        Random rand = new Random();
+//        int uniqueID = rand.nextInt(100000);
+//        return uniqueID;
+//
+//    }
 }
